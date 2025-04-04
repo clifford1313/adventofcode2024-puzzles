@@ -1,13 +1,11 @@
-package com.adventofcode2017.puzzles;
+package com.adventofcode2024.puzzles;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.adventofcode2017.IPuzzle;
+import com.adventofcode2024.IPuzzle;
 
 public class Puzzle5 implements IPuzzle {
 	@Override

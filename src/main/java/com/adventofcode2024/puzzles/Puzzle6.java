@@ -1,11 +1,11 @@
-package com.adventofcode2017.puzzles;
+package com.adventofcode2024.puzzles;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import com.adventofcode2017.IPuzzle;
+import com.adventofcode2024.IPuzzle;
 
 public class Puzzle6 implements IPuzzle {
 //	int[] MEMORYBANK = {0,2,7,0};

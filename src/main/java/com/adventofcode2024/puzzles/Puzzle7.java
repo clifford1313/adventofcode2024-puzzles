@@ -1,4 +1,4 @@
-package com.adventofcode2017.puzzles;
+package com.adventofcode2024.puzzles;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.adventofcode2017.IPuzzle;
+import com.adventofcode2024.IPuzzle;
 
 public class Puzzle7 implements IPuzzle {
 

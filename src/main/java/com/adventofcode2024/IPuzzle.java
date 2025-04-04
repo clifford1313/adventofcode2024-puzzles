@@ -1,4 +1,4 @@
-package com.adventofcode2017;
+package com.adventofcode2024;
 
 import java.io.File;
 
