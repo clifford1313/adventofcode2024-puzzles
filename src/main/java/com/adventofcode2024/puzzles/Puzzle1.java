@@ -19,8 +19,8 @@ public class Puzzle1 implements IPuzzle {
 	}
 
 	public void execute1() {
-		List<Integer> left = new ArrayList<Integer>();
-		List<Integer> right = new ArrayList<Integer>();
+		List<Integer> left = new ArrayList<>();
+		List<Integer> right = new ArrayList<>();
 
 		List<String> lines = getInputs("puzzle1_1.txt");
 		for(String l : lines) {
@@ -41,8 +41,8 @@ public class Puzzle1 implements IPuzzle {
 	}
 
 	public void execute2() {
-		List<Integer> left = new ArrayList<Integer>();
-		List<Integer> right = new ArrayList<Integer>();
+		List<Integer> left = new ArrayList<>();
+		List<Integer> right = new ArrayList<>();
 
 		List<String> lines = getInputs("puzzle1_1.txt");
 		for(String l : lines) {
