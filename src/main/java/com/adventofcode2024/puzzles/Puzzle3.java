@@ -1,109 +1,116 @@
 package com.adventofcode2024.puzzles;
 
-import java.util.HashMap;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import com.adventofcode2024.IPuzzle;
 
 public class Puzzle3 implements IPuzzle {
-	private final int INPUT = 312051;
-//	private final int INPUT = 37;
-	@Override
-	public void execute() {
-		executeStep1();
-		executeStep2();
-	}
-	
-	private void executeStep2() {
-		int sq[][] = new int[100][100];
-		int x = 50;
-		int y = 50;
-		int cursqsz = 3;
-		
-		sq[x][y] = 1;
 
-		try {
-			for (;;) {
-				x += 1;
-				sq[x][y] = addAll(sq, x, y);
-				for (int i = 1; i < cursqsz - 1; i++) {
-					y += 1;
-					sq[x][y] = addAll(sq, x, y);
-				}
-				for (int i = 1; i < cursqsz; i++) {
-					x -= 1;
-					sq[x][y] = addAll(sq, x, y);
-				}
-				for (int i = 1; i < cursqsz; i++) {
-					y -= 1;
-					sq[x][y] = addAll(sq, x, y);
-				}
-				for (int i = 1; i < cursqsz; i++) {
-					x += 1;
-					sq[x][y] = addAll(sq, x, y);
-				}
-				cursqsz += 2;
-//				printSq(sq);
-			}
-		} catch(Exception e) {
-			System.out.println("Result = " + e.getMessage());
-		}
-		
+    private final int INPUT = 312051;
+//	private final int INPUT = 37;
+
+    @Override
+    public void execute() {
+        executeStep1();
+        executeStep2();
+    }
+
+    private void executeStep1() {
+        List<String> lines = getInputs("puzzle3_1.txt");
+        List<String> allMatches = new ArrayList<>();
+        for (String line : lines) {
+            Matcher m = Pattern.compile("mul\\([0-9]{1,3},[0-9]{1,3}\\)").matcher(line);
+            while (m.find()) {
+                allMatches.add(m.group());
+            }
+        }
+        //displayAll(allMatches);
+        int total = executeInstructions(allMatches);
+        System.out.println("Response 1 = " + total + "\n");
+    }
+
+	private void executeStep2() {
+        List<String> lines = getInputs("puzzle3_1.txt");
+        List<String> allMatches = new ArrayList<>();
+        for (String line : lines) {
+            Matcher m = Pattern.compile("mul\\([0-9]{1,3},[0-9]{1,3}\\)|don't\\(\\)|do\\(\\)").matcher(line);
+            while (m.find()) {
+                allMatches.add(m.group());
+            }
+        }
+
+		allMatches = keepOnlyDoInstructions(allMatches);
+        //displayAll(allMatches);
+        int total = executeInstructions(allMatches);
+        System.out.println("Response 2 = " + total + "\n");
 	}
-	
-	private void printSq(int[][] sq) {
-		System.out.println();
-		for(int y = 0; y < 100; y++) {
-			for(int x = 0; x < 100; x++) {
-				System.out.print(String.format("%5d", sq[x][y]));
+
+	List<String> keepOnlyDoInstructions(List<String> instructions) {
+		List<String> finalList = new ArrayList<>();
+		boolean keep = true;
+		for(String instruction : instructions) {
+			switch(instruction) {
+				case "do()":
+					keep = true;
+					break;
+				case "don't()":
+					keep = false;
+					break;
+				default:
+					if(keep) {
+						finalList.add(instruction);
+					}
 			}
-			System.out.println();
 		}
+		return finalList;
 	}
-	
-	private int addAll(int[][] sq, int x, int y) throws Exception {
-		int value = 0;
-		value += sq[x-1][y+1];
-		value += sq[x][y+1];
-		value += sq[x+1][y+1];
-		value += sq[x-1][y];
-		value += sq[x+1][y];
-		value += sq[x-1][y-1];
-		value += sq[x][y-1];
-		value += sq[x+1][y-1];
-		if(value >= INPUT) {
-			throw new Exception(new Integer(value).toString());
+
+	int executeInstruction(String op, String p1, String p2) {
+		switch(op) {
+			case "mul":
+				return Integer.parseInt(p1) * Integer.parseInt(p2);
 		}
-		return value;
+		return 0;
 	}
-	
-	private void executeStep1() {
-		//determine which square is the good one
-		int squarenb = 1;
-		int squaresize = 0;
-		for(int i = 2;;i+=2) {
-			if(i * i > INPUT) {
-				break;
-			}
-			squarenb++;
-			squaresize = i;
+
+    int executeInstructions(List<String> instructions) {
+        int result = 0;
+        for (String instruction : instructions) {
+            String sOp = instruction.substring(0, instruction.indexOf("("));
+            String sP1 = instruction.substring(instruction.indexOf("(") + 1, instruction.indexOf(","));
+            String sP2 = instruction.substring(instruction.indexOf(",") + 1, instruction.indexOf(")"));
+
+			int temp = executeInstruction(sOp, sP1, sP2);
+			result += temp;
+
+			//System.out.println("[" + sOp + "][" + sP1 + "][" + sP2 + "] = " + temp);
 		}
-		
-		System.out.println("Square nb = " + squarenb + " - Square size = " + squaresize);
-		
-		//determine position of INPUT in the square
-		int sc1 = squaresize * squaresize;
-		int sc2 = 0;
-		int inputpos = 0;
-		for(int i = 0; i < 4; i++) {
-			sc2 = sc1 + squaresize;
-			if(sc1 < INPUT && sc2 > INPUT) {
-				int mid = (sc1 + sc2) / 2;
-				inputpos = Math.abs(INPUT - mid);
-				break;
-			}
-			sc1 = sc2;
-		}
-		
-		System.out.println("Result = " + (inputpos + squarenb));
-	}
+
+		return result ;
+    }
+
+    void displayAll(List<String> items) {
+        String text = items.stream().map(Object::toString).collect(Collectors.joining(", "));
+        System.out.println("Items : " + text + "\n");
+    }
+
+    ArrayList<String> getInputs(String filename) {
+        ArrayList<String> lines = null;
+        try {
+            File file = getResourceFile(filename);
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            lines = new ArrayList<String>(br.lines().toList());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return lines;
+    }
 }
