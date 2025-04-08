@@ -14,9 +14,6 @@ import com.adventofcode2024.IPuzzle;
 
 public class Puzzle3 implements IPuzzle {
 
-    private final int INPUT = 312051;
-//	private final int INPUT = 37;
-
     @Override
     public void execute() {
         executeStep1();
