@@ -29,10 +29,10 @@ public class Puzzle5 implements IPuzzle {
         for (String rule : inputs) {
             if (rule.isEmpty()) {
 				inputFlag = true;
-                break;
+				continue;
             }
             if (!inputFlag) {
-                String[] ruleParts = rule.split("|");
+                String[] ruleParts = rule.split("\\|");
                 int ruleKey = Integer.parseInt(ruleParts[0]);
                 int ruleValue = Integer.parseInt(ruleParts[1]);
 
@@ -54,8 +54,35 @@ public class Puzzle5 implements IPuzzle {
 
 		// Ici on a donc la liste *rules* qui contient les règles d'impression
 		// et dans *prints* la liste des impressions à effectuer
-		
 
+		List<List<Integer>> validPrints = new ArrayList<>();
+		for(List<Integer> print : prints) {
+			boolean isValid = true;
+			invalid:
+			for(int curIdx = 0; curIdx < print.size(); curIdx++) {
+				List<Integer> rule = rules.get(print.get(curIdx));
+				if(rule != null) {
+					for(int curRule : rule) {
+						if(print.contains(curRule)) {
+							if(print.indexOf(curRule) < curIdx) {
+								isValid = false;
+								break invalid;
+							}
+						}
+					}
+				}
+			}
+			if(isValid) {
+				validPrints.add(print);
+			}	
+
+		}
+		//System.out.println(validPrints);
+		int total = 0;
+		for(List<Integer> curValid : validPrints) {
+			total += curValid.get((curValid.size() - 1) / 2 );
+		}
+		System.out.println("Response 1 : " + total);
     }
 
     private void executeStep2() {
