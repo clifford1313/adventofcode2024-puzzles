@@ -45,14 +45,14 @@ public class Puzzle6 implements IPuzzle {
             }
         }
         //displayAll(map);
-		char[][] result = walkAndMark(map, startX, startY, startDirection);
-		//displayAll(result);
+        char[][] result = walkAndMark(map, startX, startY, startDirection);
+        //displayAll(result);
 
-		for(int y = 0; y < result.length; y++) {
-			for(int x = 0; x < result[0].length; x++) {
-				total += (result[x][y] == 'X' ? 1 : 0);
-			}
-		}
+        for (int y = 0; y < result.length; y++) {
+            for (int x = 0; x < result[0].length; x++) {
+                total += (result[x][y] == 'X' ? 1 : 0);
+            }
+        }
 
         System.out.println("Response 1 = " + total + "\n");
     }
@@ -64,47 +64,56 @@ public class Puzzle6 implements IPuzzle {
         int curX = startX;
         int curY = startY;
         char curDirection = direction;
-        while (curX >= 0 && curX < map[0].length - 1 && curY >= 0 && curY < map.length - 1) {
-			//displayAll(map);
-			map[curX][curY] = 'X';
+//        while (curX >= 0 && curX <= map.length - 1 && curY >= 0 && curY <= map[0].length - 1) {
+        boolean keepMoving = true;
+        while (keepMoving) {
+            //displayAll(map);
+            map[curX][curY] = 'X';
             switch (curDirection) {
                 case UP:
-                    if (map[curX][curY - 1] == '#') {
+                    if(curY - 1 < 0) {
+                        keepMoving = false;
+                    } else if (map[curX][curY - 1] == '#') {
                         curDirection = RIGHT;
                     } else {
                         map[curX][curY - 1] = curDirection;
-						curY--;
+                        curY--;
                     }
                     break;
                 case DOWN:
-                    if (map[curX][curY + 1] == '#') {
+                    if(curY + 1 > map[0].length - 1) {
+                        keepMoving = false;
+                    } else if (map[curX][curY + 1] == '#') {
                         curDirection = LEFT;
                     } else {
                         map[curX][curY + 1] = curDirection;
-						curY++;
+                        curY++;
                     }
                     break;
                 case LEFT:
-				if (map[curX - 1][curY] == '#') {
-					curDirection = UP;
-				} else {
-					map[curX - 1][curY] = curDirection;
-					curX--;
-				}
-				break;
+                    if(curX - 1 < 0) {
+                        keepMoving = false;
+                    } else if (map[curX - 1][curY] == '#') {
+                        curDirection = UP;
+                    } else {
+                        map[curX - 1][curY] = curDirection;
+                        curX--;
+                    }
+                    break;
                 case RIGHT:
-				if (map[curX + 1][curY] == '#') {
-					curDirection = DOWN;
-				} else {
-					map[curX + 1][curY] = curDirection;
-					curX++;
-				}
-				break;
+                    if(curX + 1 > map.length - 1) {
+                        keepMoving = false;
+                    } else if (map[curX + 1][curY] == '#') {
+                        curDirection = DOWN;
+                    } else {
+                        map[curX + 1][curY] = curDirection;
+                        curX++;
+                    }
+                    break;
             }
         }
-		map[curDirection == LEFT ? curX + 1 : curDirection == RIGHT ? curX - 1 : curX][curDirection == UP ? curY + 1 : curDirection == DOWN ? curY - 1 : curY] = 'X';
-		return map;
-	}
+        return map;
+    }
 
     void displayAll(char[][] items) {
         for (int y = 0; y < items.length; y++) {
